@@ -1,0 +1,24 @@
+box:
+  id: golang
+
+dev:
+  steps:
+    - setup-go-workspace:
+        package-dir: github.com/liambilbo/hellogo
+
+    - script:
+        name: env
+        code: env
+
+    - script:
+        name: go get
+        code: |
+          cd $WERCKER_SOURCE_DIR
+          go version
+          go get -u github.com/Masterminds/glide
+          export PATH=$WERCKER_SOURCE_DIR/bin:$PATH
+          glide install
+
+    - internal/watch:
+        code: go run main.go
+        reload: true
